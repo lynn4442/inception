@@ -1,0 +1,7 @@
+# Ignore unnecessary files
+*.md
+*.txt
+.git
+.gitignore
+.DS_Store
+Thumbs.db
