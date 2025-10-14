@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit on error, undefined variables, and pipe failures
+set -euo pipefail
+
 # Fix permissions
 chown -R mysql:mysql /var/lib/mysql /run/mysqld
 chmod 755 /var/lib/mysql
@@ -7,7 +10,10 @@ chmod 755 /var/lib/mysql
 # Initialize database if needed
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "Initializing MariaDB..."
-    mysql_install_db --user=mysql --datadir=/var/lib/mysql
+    if ! mysql_install_db --user=mysql --datadir=/var/lib/mysql; then
+        echo "ERROR: Failed to initialize MariaDB database"
+        exit 1
+    fi
     
     # Start temporary instance with socket only
     mysqld --user=mysql --datadir=/var/lib/mysql --skip-networking --socket=/run/mysqld/mysqld.sock &
@@ -31,9 +37,18 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     # Run init script using environment variables
     echo "Running initialization script..."
     mysql --socket=/run/mysqld/mysqld.sock << EOF
+-- Secure root account
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1');
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+
+-- Create WordPress database and user
 CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
 CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
 GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+
 FLUSH PRIVILEGES;
 EOF
     
@@ -45,4 +60,4 @@ fi
 
 # Start MariaDB normally
 echo "Starting MariaDB..."
-exec mysqld --user=mysql --console --skip-networking=0 --bind-address=0.0.0.0 --port=3306	
+exec mysqld --user=mysql --console --skip-networking=0 --bind-address=0.0.0.0 --port=3306

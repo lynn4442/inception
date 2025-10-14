@@ -17,9 +17,8 @@ all: setup
 .PHONY: setup
 setup:
 	@echo "Creating data directories..."
-	@sudo mkdir -p /home/$(LOGIN)/data/mariadb
-	@sudo mkdir -p /home/$(LOGIN)/data/wordpress
-	@sudo chown -R $(LOGIN):$(LOGIN) /home/$(LOGIN)/data
+	@mkdir -p /home/$(LOGIN)/data/mariadb 2>/dev/null || true
+	@mkdir -p /home/$(LOGIN)/data/wordpress 2>/dev/null || true
 
 # Stops the services
 down:

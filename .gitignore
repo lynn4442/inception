@@ -1,0 +1,19 @@
+# Environment variables with sensitive data
+srcs/.env
+
+# Data directories
+/home/*/data/
+
+# Docker volumes
+*.log
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
