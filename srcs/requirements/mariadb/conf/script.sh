@@ -36,21 +36,16 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     
     # Run init script using environment variables
     echo "Running initialization script..."
-    mysql --socket=/run/mysqld/mysqld.sock << EOF
--- Secure root account
-ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1');
-DELETE FROM mysql.user WHERE User='';
-DROP DATABASE IF EXISTS test;
-DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
-
--- Create WordPress database and user
-CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
-CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
-
-FLUSH PRIVILEGES;
-EOF
+    mysql --socket=/run/mysqld/mysqld.sock -e "
+        ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+        DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1');
+        DELETE FROM mysql.user WHERE User='';
+        DROP DATABASE IF EXISTS test;
+        DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+        CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+        CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+        GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
+        FLUSH PRIVILEGES;"
     
     # Stop temporary instance
     echo "Stopping temporary instance..."

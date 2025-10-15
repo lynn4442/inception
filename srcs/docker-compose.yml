@@ -13,7 +13,7 @@ services:
       - inception
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD} -e 'SELECT 1' ${MYSQL_DATABASE} || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,7 +22,7 @@ services:
     build: requirements/wordpress/.
     container_name: wp-php
     environment:
-      - MYSQL_HOST=mariadb
+      - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
@@ -50,8 +50,9 @@ services:
     container_name: nginx
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
+      - WORDPRESS_HOST=${WORDPRESS_HOST}
+      - WORDPRESS_PORT=${WORDPRESS_PORT}
     ports:
-      - "80:80"
       - "443:443"
     volumes:
       - /home/${LOGIN}/data/wordpress:/var/www/html
@@ -69,3 +70,4 @@ services:
 
 networks:
   inception:
+    driver: bridge

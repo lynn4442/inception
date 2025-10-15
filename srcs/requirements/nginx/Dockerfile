@@ -6,7 +6,6 @@ RUN apk add --no-cache nginx openssl gettext && \
 COPY conf/default /etc/nginx/templates/default.conf.template
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY tools/start.sh /start.sh
-
 RUN chmod +x /start.sh
 
 CMD ["/start.sh"]
