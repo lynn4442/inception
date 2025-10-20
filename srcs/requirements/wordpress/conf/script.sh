@@ -12,10 +12,7 @@ fi
 [ ! -f "index.php" ] && \
     php -d memory_limit=256M wp-cli.phar core download --allow-root
 
-for i in {60..0}; do
-    php -r "new mysqli('${MYSQL_HOST}','${MYSQL_USER}',\
-'${MYSQL_PASSWORD}','${MYSQL_DATABASE}');" 2>/dev/null && break
-    [ "$i" = 0 ] && exit 1
+while ! php -r "new mysqli('${MYSQL_HOST}','${MYSQL_USER}','${MYSQL_PASSWORD}','${MYSQL_DATABASE}');" 2>/dev/null; do
     sleep 1
 done
 
