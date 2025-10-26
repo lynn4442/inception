@@ -1,13 +1,12 @@
 FROM alpine:3.21
 
-RUN apk add --no-cache nginx openssl gettext && mkdir -p /etc/nginx/ssl /etc/nginx/templates
+RUN apk update && apk upgrade && apk add nginx openssl
 
-COPY conf/default /etc/nginx/templates/default.conf.template
+RUN mkdir -p /etc/nginx/ssl
 
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/default.conf /etc/nginx/http.d/default.conf
+COPY tools/script.sh /script.sh
 
-COPY tools/start.sh /start.sh
+RUN chmod +x /script.sh
 
-RUN chmod +x /start.sh
-
-CMD ["/start.sh"]
+CMD ["/script.sh"]
