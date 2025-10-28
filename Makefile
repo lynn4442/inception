@@ -67,7 +67,7 @@ logs-nginx:
 	@docker logs -f nginx
 
 logs-wordpress:
-	@docker logs -f wp-php
+	@docker logs -f wordpress
 
 logs-mariadb:
 	@docker logs -f mariadb
@@ -78,39 +78,22 @@ status:
 
 # Show running containers
 ps:
-	@docker ps -a --filter "name=nginx\|wp-php\|mariadb"
+	@docker ps -a --filter "name=nginx\|wordpress\|mariadb"
 
 # Execute shell in containers
-exec-nginx:
-	@docker exec -it nginx sh
+# exec-nginx:
+# 	@docker exec -it nginx sh
 
-exec-wordpress:
-	@docker exec -it wp-php sh
+# exec-wordpress:
+# 	@docker exec -it wordpress sh
 
-exec-mariadb:
-	@docker exec -it mariadb sh
+# exec-mariadb:
+# 	@docker exec -it mariadb sh
 
-# Database operations
-db-connect:
-	@echo "$(GREEN)Connecting to MariaDB...$(NC)"
-	@docker exec -it mariadb mysql -u root -p$(shell grep MYSQL_ROOT_PASSWORD $(ENV_FILE) | cut -d '=' -f2)
-
-db-backup:
-	@echo "$(GREEN)Backing up database...$(NC)"
-	@mkdir -p backups
-	@docker exec mariadb mysqldump -u root -p$(shell grep MYSQL_ROOT_PASSWORD $(ENV_FILE) | cut -d '=' -f2) \
-		$(shell grep MYSQL_DATABASE $(ENV_FILE) | cut -d '=' -f2) > backups/wordpress_$(shell date +%Y%m%d_%H%M%S).sql
-	@echo "$(GREEN)Database backup created in backups/$(NC)"
-
-# WordPress operations
-wp-cli:
-	@docker exec -it wp-php ./wp-cli.phar --allow-root $(CMD)
-
-wp-info:
-	@echo "$(GREEN)WordPress Information:$(NC)"
-	@docker exec wp-php ./wp-cli.phar core version --allow-root
-	@docker exec wp-php ./wp-cli.phar plugin list --allow-root
-	@docker exec wp-php ./wp-cli.phar user list --allow-root
+# # Database operations
+# db-connect:
+# 	@echo "$(GREEN)Connecting to MariaDB...$(NC)"
+# 	@docker exec -it mariadb mysql -u root -p$(shell grep MYSQL_ROOT_PASSWORD $(ENV_FILE) | cut -d '=' -f2)
 
 # Network inspection
 network-inspect:
@@ -119,10 +102,3 @@ network-inspect:
 # Volume inspection
 volumes:
 	@docker volume ls | grep srcs
-
-volume-inspect-db:
-	@docker volume inspect srcs_db-data
-
-volume-inspect-wp:
-	@docker volume inspect srcs_wp-files
-
