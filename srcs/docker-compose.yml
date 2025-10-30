@@ -41,3 +41,6 @@ services:
 networks:
   inception:
     driver: bridge
+
+# basically if i put the bridge here i let them communicate using names and not ips
+# but need to add networks in each container on it own

@@ -1,17 +1,9 @@
-[server]
+[server] # here for standard structure
 
 [mysqld]
-# skip-networking
-user = root
-datadir = /var/lib/mysql
-tmpdir = /tmp
-
+user = root # who runs the database
+datadir = /var/lib/mysql # where the db is stored
+tmpdir = /tmp # tmp storage for wueries and sorting
+ 
 [galera]
-
-bind-address = 0.0.0.0
-
-[embedded]
-
-[mariadb]
-
-[mariadb-10.5]
+bind-address = 0.0.0.0 # which interfaces to listen on (here all)
