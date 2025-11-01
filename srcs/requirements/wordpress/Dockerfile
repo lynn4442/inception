@@ -4,6 +4,7 @@ RUN apk update && apk upgrade && apk add \
     php83-fpm \
     php83-mysqli \
     php83-phar \
+    php83-mbstring \
     curl && \
     ln -sf /usr/bin/php83 /usr/bin/php
 # php83-mysqli -->  MySQL/MariaDB extension for PHP

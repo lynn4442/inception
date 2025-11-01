@@ -9,7 +9,7 @@ sleep 10
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar
 
-./wp-cli.phar core download --allow-root
+php -d memory_limit=256M ./wp-cli.phar core download --allow-root
 
 # Create wp-config.php
 ./wp-cli.phar config create \
