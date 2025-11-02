@@ -1,0 +1,37 @@
+# Environment files
+.env
+*.env
+.env.*
+
+# Docker volumes
+data/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs
+*.log
+logs/
+
+# SSL certificates (if generated locally)
+*.pem
+*.crt
+*.key
+
+# Backup files
+*.bak
+*.backup

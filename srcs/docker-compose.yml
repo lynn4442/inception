@@ -3,7 +3,7 @@ services:
     build: requirements/mariadb/.
     container_name: mariadb
     volumes:
-      - /home/lyoussef/data/mariadb:/var/lib/mysql
+      - db-data:/var/lib/mysql
     networks:
       - inception
     env_file:
@@ -14,7 +14,7 @@ services:
     build: requirements/wordpress/.
     container_name: wordpress
     volumes:
-      - /home/lyoussef/data/wordpress:/var/www/html
+      - wordpress_data:/var/www/html
     networks:
       - inception
     depends_on:
@@ -29,7 +29,7 @@ services:
     ports:
       - "443:443"
     volumes:
-       - /home/lyoussef/data/wordpress:/var/www/html
+       - wordpress_data:/var/www/html
     networks:
       - inception
     depends_on:
@@ -37,6 +37,12 @@ services:
     env_file:
       - .env
     restart: always
+
+volumes:
+  db-data:
+    driver: local
+  wordpress_data:
+    driver: local
 
 networks:
   inception:
