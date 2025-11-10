@@ -60,13 +60,13 @@ Browser (HTTPS) → Nginx (Web Server) → WordPress (Website) → MariaDB (Data
 ```
 inception_final/
 ├── Makefile                    # Easy commands to control everything
-├── srcs/
-│   ├── .env                    # Your configuration (passwords, domain, etc.)
-│   ├── docker-compose.yml      # Defines the 3 containers
-│   └── requirements/
-│       ├── mariadb/            # Database container setup
-│       ├── nginx/              # Web server container setup
-│       └── wordpress/          # WordPress container setup
+└── srcs/
+    ├── .env                    # Your configuration (passwords, domain, etc.)
+    ├── docker-compose.yml      # Defines the 3 containers
+    └── requirements/
+        ├── mariadb/            # Database container setup
+        ├── nginx/              # Web server container setup
+        └── wordpress/          # WordPress container setup
 ```
 
 ## How It Works
